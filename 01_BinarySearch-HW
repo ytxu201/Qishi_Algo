@@ -1,0 +1,145 @@
+/*
+HW-01
+LeetCode 744. Find Smallest Letter Greater Than Target
+https://leetcode.com/problems/find-smallest-letter-greater-than-target/description/
+*/
+
+class Solution {
+public:
+    char nextGreatestLetter(vector<char>& letters, char target) {
+        int left = 0, right = letters.size();
+        while(left < right){
+            int mid = left + (right - left)/2;
+            if(letters[mid] <= target) left = mid + 1;
+            else right = mid;
+        }
+        if(left == letters.size()) left = 0;
+        return letters[left];
+    }
+};
+
+
+/*
+HW-02
+475. Heaters
+https://leetcode.com/problems/heaters/description/
+*/
+
+class Solution {
+public:
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        int res = 0;
+        sort(heaters.begin(), heaters.end());
+        for(auto a : houses){
+            auto left = upper_bound(heaters.begin(), heaters.end(), a);
+            if(left == heaters.begin()) res = max(res, *left - a);
+            else if(left == heaters.end()) res = max(res, a - *(left-1));
+            else res = max(res, min(*left - a, a - *(left - 1)));
+        }
+        return res;
+    }
+};
+
+
+/*
+HW-03
+34. Find First and Last Position of Element in Sorted Array
+https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/description/
+*/
+
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        auto left = lower_bound(nums.begin(), nums.end(), target), right = upper_bound(nums.begin(), nums.end(), target);
+        if(left == right) return {-1, -1};
+        return {left - nums.begin(), right - nums.begin() - 1};
+    }
+};
+
+
+
+/*
+HW-04
+162. Find Peak Element
+https://leetcode.com/problems/find-peak-element/description/
+*/
+
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int left = 0, right = nums.size() - 1;
+        while(left < right){
+            int mid = left + (right - left)/2;
+            if(nums[mid] > nums[mid + 1]) right = mid;
+            else left = mid + 1;
+        }
+        return left;
+    }
+};
+
+
+/*
+HW-05
+719. Find K-th Smallest Pair Distance
+https://leetcode.com/problems/find-k-th-smallest-pair-distance/description/
+*/
+
+class Solution {
+public:
+    int smallestDistancePair(vector<int>& nums, int k) {
+        int res = 0;
+        sort(nums.begin(), nums.end());
+        int left = 0, right = nums.back() - nums.front();//bianry search to the difference range
+        while(left < right){
+            int mid = left + (right - left)/2;
+            int i = 0, count = 0;
+            for(int j=0; j<nums.size(); ++j){
+                while(nums[j] - nums[i] > mid) ++i;
+                count += j - i;
+            }
+            if(count >= k) right = mid;
+            else left = mid + 1;
+        }
+        return left;
+    }
+};
+
+
+/*
+HW-06
+有一条公路，长度是m, 中间有k个加油站，由此我们可以得到一个相邻加油站之间的最大距离，然后给你一个数t，这个数代表增加的加油站的数量（往里面插入），
+求使得相邻加油站之间最大距离变得最小的值，返回这个最小的最大距离。
+http://www.1point3acres.com/bbs/thread-212722-1-1.html
+*/
+Intuition:
+1): Binary search for the smallest value of the largest distance.
+2): let say this smallest value is x, then there are n (n<=k+1) distances larger than x before insertion. And we have to 
+make sure that after inserting t more gas stations, all the n distances will be cut into smaller distances than x. If any of 
+them is equal to ax + b (a>=1, and b>=0 and b<x), then we need to insert at least t + 1 gas stations, to make sure the largest
+one generated is smaller than x.
+
+class Solution {
+public:
+    int smallestDistancePair(int m, vector<double>& gasStations, int t) {
+        double res = 0.0;
+        vector<double> distances;
+        int k = gasStations.size();//gasStations inlcudes the 0, and m, as well as all the coordinates of gas stations.
+        for(int i=1; i<k; ++i){
+            int a = gasStations[i] - gasStations[i-1];
+            distances.push_back(a);
+        }
+        sort(distances.begin(), distances.end());
+        int left = 0, right = nums.back() - nums.front();//bianry search to the difference range
+        while(left < right){
+            int mid = left + (right - left)/2;
+            int i = 0, count = 0;
+            for(int j=0; j<nums.size(); ++j){
+                while(nums[j] - nums[i] > mid) ++i;
+                count += j - i;
+            }
+            if(count >= k) right = mid;
+            else left = mid + 1;
+        }
+        return left;
+    }
+};
