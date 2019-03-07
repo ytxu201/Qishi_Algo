@@ -112,11 +112,17 @@ HW-06
 http://www.1point3acres.com/bbs/thread-212722-1-1.html
 */
 Intuition:
-1): Binary search for the smallest value of the largest distance.
-2): let say this smallest value is x, then there are n (n<=k+1) distances larger than x before insertion. And we have to 
+1): for example, let's say the distances are 1, 2, 3, and 20, and t = 2. Obviously we will insert 2 gas stations uniformly into the 
+last distance of 20, to cut it into three pieces with equal distance. (Thus, a greedy approach by inserting the gas station one by 
+one into the middle of the largest distance will not work for this question.)
+2): Binary search for the smallest value of the largest distance.
+3): let say this smallest value is x, then there are n (n<=k+1) distances larger than x before insertion. And we have to 
 make sure that after inserting t more gas stations, all the n distances will be cut into no larger distances than (<=) x. If any of 
-them is equal to (ai)x + bi (ai>=1, and bi>=0 and bi<x), then we need to insert at least ai (or ai-1 when bi == 0) gas stations, to make sure the largest
-one generated is smaller than or equal to x. The sum of all ai should equal to t.
+them is equal to (ai)x + bi (ai>=1, and bi>=0 and bi<x), then we need to insert at least ai (or ai-1 when bi == 0) gas stations, to 
+make sure the largest one generated is smaller than or equal to x. The sum of all ai should equal to t. If the sum is larger than t,
+we need to adjust x value to be higher; otherwise, smaller.
+4): since we are looking for the smallest value of the largest distance, it is equivalent to the lower_bound of binary search.
+
 
 class Solution {
 public:
