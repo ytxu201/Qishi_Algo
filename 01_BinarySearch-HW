@@ -114,32 +114,37 @@ http://www.1point3acres.com/bbs/thread-212722-1-1.html
 Intuition:
 1): Binary search for the smallest value of the largest distance.
 2): let say this smallest value is x, then there are n (n<=k+1) distances larger than x before insertion. And we have to 
-make sure that after inserting t more gas stations, all the n distances will be cut into smaller distances than x. If any of 
-them is equal to ax + b (a>=1, and b>=0 and b<x), then we need to insert at least t + 1 gas stations, to make sure the largest
-one generated is smaller than x.
+make sure that after inserting t more gas stations, all the n distances will be cut into no larger distances than (<=) x. If any of 
+them is equal to (ai)x + bi (ai>=1, and bi>=0 and bi<x), then we need to insert at least ai (or ai-1 when bi == 0) gas stations, to make sure the largest
+one generated is smaller than or equal to x. The sum of all ai should equal to t.
 
 class Solution {
 public:
-    int smallestDistancePair(int m, vector<double>& gasStations, int t) {
-        double res = 0.0;
+    double smallestDistancePair(int m, vector<double>& gasStations, int t) {
+        double res = 0.0, epsilon = 1e-6;
         vector<double> distances;
-        int k = gasStations.size();//gasStations inlcudes the 0, and m, as well as all the coordinates of gas stations.
-        for(int i=1; i<k; ++i){
+        int K = gasStations.size();//the number of inital gas station is k = K-2 due to two boundaries.
+        //gasStaions contains the sorted coordinates of gasStations inlcudes the 0, and m, as well as all the coordinates of gas stations.
+        for(int i=1; i<K; ++i){
             int a = gasStations[i] - gasStations[i-1];
             distances.push_back(a);
         }
         sort(distances.begin(), distances.end());
-        int left = 0, right = nums.back() - nums.front();//bianry search to the difference range
+        double left = ((double) m)/((double)(K+t-1)), right = distances.back();//bianry search to the limiting distance x.
+        //left is the possible smallest distance, and right is the possible largest distance.
         while(left < right){
-            int mid = left + (right - left)/2;
-            int i = 0, count = 0;
-            for(int j=0; j<nums.size(); ++j){
-                while(nums[j] - nums[i] > mid) ++i;
-                count += j - i;
+            double mid = left + (right - left)/2.0;
+            int i = 0, count = 0, int j = upper_bound(distances.begin(), distances.end(), mid) - distances.begin();
+            for(; j<distances.size(); ++j){
+                int a = (int) distances[j]/mid;
+                if(distances[j]-a*mid <= epsilon) count += a - 1;//need to insert (a-1).
+                else count += a;
+                if(count > t) break;//no need to scan more.
             }
-            if(count >= k) right = mid;
-            else left = mid + 1;
+            if(count > t) left = mid + 0.5;//need more than t gas stations, thus we need to increase x or mid here.
+            else right = mid;
         }
-        return left;
+        res = left;
+        return res;
     }
 };
