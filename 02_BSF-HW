@@ -1,0 +1,135 @@
+/*
+HW-01
+LeetCode 733. Flood Fill
+https://leetcode.com/problems/flood-fill/description/
+*/
+
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        int m = image.size();
+        if(!m) return image;
+        int n = image.front().size();
+        bsf(image, sr, sc, image[sr][sc]);
+        for(int i=0; i<m; ++i){
+            for(int j=0; j<n; ++j){
+                if(image[i][j] == -1) image[i][j] = newColor;
+            }
+        }
+        return image;
+    }
+private:
+    void bsf(vector<vector<int>>& g, int x, int y, int val){
+        queue<pair<int, int>> q;
+        vector<int> dirs = {-1, 0, 1, 0, -1};
+        q.push({x, y});
+        g[x][y] = -1;
+        while(!q.empty()){
+            auto t = q.front();
+            q.pop();
+            for(int i=0; i+1<dirs.size(); ++i){
+                int a = t.first + dirs[i], b = t.second + dirs[i+1];
+                if(a>=0 && a<g.size() && b>=0 && b<g.front().size() && g[a][b] == val){
+                    q.push({a, b});
+                    g[a][b] = -1;
+                }
+            }
+        }
+    }
+};
+
+
+/*
+HW-02
+LeetCode 547. Friend Circles
+https://leetcode.com/problems/friend-circles/description/
+*/
+
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        int res = 0, m = M.size();
+        if(!m) return res;
+        vector<bool> visit(m, true);
+        for(int i=0; i<m; ++i){
+            if(visit[i]){
+                bsf(M, i, visit);
+                ++res;
+            }
+        }
+        return res;
+    }
+private:
+    void bsf(vector<vector<int>>& g, int idx, vector<bool> &vt){
+        queue<int> q;
+        q.push(idx);
+        vt[idx] = false;
+        while(!q.empty()){
+            auto t = q.front();
+            q.pop();
+            for(int i=0; i<g[t].size(); ++i){
+                if(vt[i] && i != t && g[t][i] == 1){
+                    q.push(i);
+                    vt[i] = false;
+                }
+            }
+        }
+    }
+};
+
+
+/*
+HW-03
+LeetCode 130. Surrounded Regions
+https://leetcode.com/problems/surrounded-regions/description/
+*/
+
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        int m = board.size();
+        if(!m) return;
+        int n = board.front().size();
+        if(!n) return;
+        for(int i=0; i<m; ++i){
+            if(board[i][0] == 'O') bsf(board, i, 0);
+            if(board[i][n-1] == 'O') bsf(board, i, n-1);
+        }
+        for(int i=0; i<n; ++i){
+            if(board[0][i] == 'O') bsf(board, 0, i);
+            if(board[m-1][i] == 'O') bsf(board, m-1, i);
+        }
+        for(int i=0; i<m; ++i){
+            for(int j=0; j<n; ++j){
+                if(board[i][j] == 'O') board[i][j] = 'X';
+                if(board[i][j] == '+') board[i][j] = 'O';
+            }
+        }
+    }
+private:
+    void bsf(vector<vector<char>> &bd, int a, int b){
+        bd[a][b] = '+';
+        queue<pair<int, int>> q;
+        q.push(make_pair(a, b));
+        vector<int> dir = {-1, 0, 1, 0, -1};
+        while(!q.empty()){
+            auto t = q.front();
+            q.pop();
+            for(int i=0; i+1<dir.size(); ++i){
+                int x = t.first + dir[i], y = t.second + dir[i+1];
+                if(x>=0 && x<bd.size() && y>=0 && y<bd.front().size() && bd[x][y] == 'O'){
+                    bd[x][y] = '+';
+                    q.push({x, y});
+                } 
+            }
+        }
+    }
+};
+
+
+/*
+HW-04
+210. Course Schedule II
+https://leetcode.com/problems/course-schedule-ii/description/
+*/
+
