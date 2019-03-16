@@ -1,7 +1,10 @@
 /*
-HW1: find number of islands. all the neighbors.
+HW-01: find number of islands. all the neighbors.
 */
 
-class solution{
-
+class Solution{
+public:
+  int findIsland(vector<vector<int>>& island){
+    
+  }
 };
