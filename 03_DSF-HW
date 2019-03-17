@@ -27,3 +27,49 @@ private:
       }
   }
 };
+
+
+/*
+HW-02: 113. Path Sum II
+*/
+
+class Solution {
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        vector<vector<int>> res;
+        vector<int> path;
+        dsf(root, sum, res, path);
+        return res;
+    }
+private:
+    void dsf(TreeNode* r, int s, vector<vector<int>>& res, vector<int>& ps){
+        if(!r) return;
+        ps.push_back(r->val);
+        if(!r->left && !r->right && s == r->val) res.push_back(ps);
+        dsf(r->left, s - r->val, res, ps);
+        dsf(r->right, s - r->val, res, ps);
+        ps.pop_back();
+    }
+};
+
+
+/*
+HW-03: 105. Construct Binary Tree from Preorder and Inorder Traversal
+*/
+
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return dsf(preorder, 0, preorder.size(), inorder, 0, inorder.size());
+    }
+private:
+    TreeNode* dsf(vector<int>& pre, int preleft, int preright, vector<int>& in, int inleft, int inright){
+        if(preright == preleft) return NULL;
+        int pos = inleft;
+        while(pos<inright && in[pos] != pre[preleft]) ++pos;
+        TreeNode* root = new TreeNode(pre[preleft]);
+        root->left = dsf(pre, preleft+1, min(preleft + pos - inleft + 1, preright), in, inleft, pos);
+        root->right = dsf(pre, min(preleft + pos - inleft + 1, preright), preright, in, pos+1, inright);
+        return root;
+    }
+};
