@@ -1,5 +1,5 @@
 //*
-HW-01: find number of islands. all the neighbors. Using bsf
+HW-01: find number of islands. all the neighbors. Using dsf
 */
 
 class Solution{
@@ -11,19 +11,19 @@ public:
     for(int i=0; i<m; ++i){
       for(int j=0; j<n; ++j){
         if(island[i][j] == '1') {
-          bsf(island, i, j);
+          dsf(island, i, j);
           ++res;
       }
     }
     return res;
   }
 private:
-  void bsf(vector<vector<char>>& g, int x, int y){
+  void dsf(vector<vector<char>>& g, int x, int y){
     if(x<0 || x>=g.size() || y<0 || y>=g.front().size() || g[x][y] != '1') return;
     g[x][y] = '-1';
     for(int i=-1; i<2; ++i){
       for(int j=-1; j<2; ++j){
-        bsf(g, x+i, y+j);
+        dsf(g, x+i, y+j);
       }
   }
 };
