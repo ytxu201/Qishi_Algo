@@ -73,3 +73,38 @@ private:
         return root;
     }
 };
+
+
+/*
+HW-05: 329. Longest Increasing Path in a Matrix
+*/
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int res = 0, m = matrix.size();
+        if(!m) return res;
+        int n = matrix.front().size();
+        vector<vector<int>> dp(m, vector<int>(n, 0));       
+        for(int i=0; i<m; ++i){
+            for(int j=0; j<n; ++j){
+                res = max(res, dsf(matrix, i, j, dp));
+            }
+        }
+        return res;
+    }
+private:
+    int dsf(vector<vector<int>>& mx, int i, int j, vector<vector<int>>& dp){
+        if(dp[i][j]) return dp[i][j];
+        vector<int> dirs = {-1, 0, 1, 0, -1};
+        int dis = 0;
+        for(int k=0; k+1<dirs.size(); ++k){
+            auto x = i + dirs[k], y = j + dirs[k+1];
+            if(x<0 || x>=mx.size() || y<0 || y>=mx.front().size() || mx[x][y] <= mx[i][j]) continue;
+            int a = dsf(mx, x, y, dp);
+            dis = max(dis, a);
+            if(a) dp[x][y] = a;
+        }
+        dp[i][j] = dis + 1;
+        return dis + 1;
+    }
+};
