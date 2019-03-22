@@ -111,7 +111,7 @@ private:
 };
 
 /*
-HW-05: 329. Longest Increasing Path in a Matrix
+HW-06: 546. Remove Boxes
 */
 
 class Solution {
