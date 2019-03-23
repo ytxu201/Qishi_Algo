@@ -76,6 +76,43 @@ private:
 
 
 /*
+HW-04: Determine whether an undirected graph has a circle or not. This question is equivalent to LeetCode 
+105. Construct Binary Tree from Preorder and Inorder Traversal
+*/
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+        vector<vector<int>> gh(numCourses);
+        vector<int> ghin(numCourses, 0);
+        for(auto a : prerequisites){
+            gh[a.second].push_back(a.first);
+            ++ghin[a.first];
+        }
+        int res = 0;
+        dsf(gh, ghin, res);//using a stack
+        return res == numCourses;
+    }
+private:
+    void dsf(vector<vector<int>>& gh, vector<int>& ghin, int &res){
+        stack<int> q;
+        int len = ghin.size();
+        for(int i=0; i<len; ++i){
+            if(ghin[i] == 0) q.push(i);
+        }
+        while(!q.empty()){
+            auto t = q.top();
+            q.pop();
+            ++res;
+            for(auto i : gh[t]){
+                if(--ghin[i] == 0) q.push(i);
+            }
+        }
+    }
+};
+
+
+/*
 HW-05: 329. Longest Increasing Path in a Matrix
 */
 
