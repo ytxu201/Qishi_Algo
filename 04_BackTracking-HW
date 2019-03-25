@@ -56,3 +56,33 @@ private:
         dsf(left, right+1, n, t+")", rs);
     }
 };
+
+
+/*
+HW-03: LeetCode 39. Combination Sum
+*/
+
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> res;
+        vector<int> temp;
+        sort(candidates.begin(), candidates.end());
+        int len = upper_bound(candidates.begin(), candidates.end(), target) - candidates.begin();
+        dsf(candidates, 0, len, target, temp, res);
+        return res;
+    }
+private:
+    void dsf(vector<int>& cs, int idx, int& len, int tar, vector<int>& t, vector<vector<int>>& rs){
+        if(tar <= 0){
+            if(tar == 0) rs.push_back(t);
+            return;
+        }
+        for(int i=idx; i<len; ++i){
+            t.push_back(cs[i]);
+            dsf(cs, i, len, tar - cs[i], t, rs);
+            t.pop_back();
+        }
+    }
+};
+
