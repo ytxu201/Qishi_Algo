@@ -1,0 +1,58 @@
+/*
+HW-01: 17. Letter Combinations of a Phone Number
+*/
+
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> res;
+        if(!digits.size()) return res;
+        for(int i=0; i<digits.size(); ++i){
+            if(digits[i] < '2' && digits[i] > '9') return res;
+        }
+        vector<string> dic = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        string temp;
+        dsf(digits, 0, dic, temp, res);
+        return res;
+    }
+private:
+    void dsf(string ds, int idx, vector<string>& dic, string t, vector<string>& r){
+        if(t.size() == ds.size()){
+            r.push_back(t);
+            return;
+        }
+        if(idx >= ds.size()) return;
+        int x = ds[idx] - '0';
+        for(int i = 0; i<dic[x].size(); ++i){
+            t.push_back(dic[x][i]);
+            dsf(ds, idx+1, dic, t, r);
+            t.pop_back();
+        }
+    }
+};
+
+
+/*
+HW-02: LeetCode 22. Generate Parentheses
+*/
+
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+   //     if(!n) return res;
+        string temp;
+        dsf(0, 0, n, temp, res);
+        return res;
+    }
+private:
+    void dsf(int left, int right, int& n, string t, vector<string>& rs){
+        if(left < right || left > n) return;
+        if(left == right && left == n){
+            rs.push_back(t);
+            return;
+        }
+        dsf(left+1, right, n, t+"(", rs);
+        dsf(left, right+1, n, t+")", rs);
+    }
+};
