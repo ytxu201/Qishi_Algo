@@ -86,3 +86,29 @@ private:
     }
 };
 
+
+/*
+HW-04: 90. Subsets II
+*/
+
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> temp;
+        sort(nums.begin(), nums.end());
+        dsf(nums, 0, temp, res);
+        return res;
+    }
+private:
+    void dsf(vector<int>&ns, int indx, vector<int>& t, vector<vector<int>>& res){
+        res.push_back(t);
+        for(int i=indx; i<ns.size(); ++i){
+            if(i>0 && ns[i] == ns[i-1] && (t.empty() || t.back() != ns[i])) continue;
+            t.push_back(ns[i]);
+            dsf(ns, i+1, t, res);
+            t.pop_back();
+            while(!t.empty() && i+1<ns.size() && t.back() == ns[i+1]) ++i; // for ie. [5, 5, 5]
+        }
+    }
+};
