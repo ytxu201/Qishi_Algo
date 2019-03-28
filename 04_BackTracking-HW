@@ -112,3 +112,42 @@ private:
         }
     }
 };
+
+
+/*
+HW-05: 37. Sudoku Solver
+*/
+
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        solveS(board, 0, 0);
+    }
+private:
+    bool solveS(vector<vector<char>>& board, int x, int y){
+        if(x == 9) return true;
+        if(y == 9) return solveS(board, x+1, 0);
+        if(board[x][y] != '.') return solveS(board, x, y+1);
+        for(int k=0; k<9; ++k){
+            if(isValid(board, x,y, '1' + k)){
+                board[x][y]='1'+k;
+                if(solveS(board, x, y+1)) return true;
+                board[x][y]='.';
+            }
+        }
+        return false;
+    }
+
+    bool isValid(vector<vector<char>>& board, int x, int y, char c){
+        for(int i=0; i<9; ++i){
+            if(i!=x&&board[i][y]==c) return false;
+            if(i!=y&&board[x][i]==c) return false;
+        }
+        for(int i=x/3*3; i<x/3*3+3; ++i){
+            for(int j=y/3*3; j<y/3*3+3; ++j){
+                if((i!=x||j!=y)&&board[i][j]==c) return false;
+            }
+        }
+        return true;
+    } 
+};
