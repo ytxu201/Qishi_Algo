@@ -42,9 +42,33 @@ public:
     }
 };
 
+
 /*
 HW-03: LeetCode 169 Majority Element
 */
+
+class Solution {
+public:
+    int majorityElement(vector<int> &num) {
+        return help(num, 0, num.size()-1);
+    }
+private:
+    int help(vector<int>& ns, int left, int right){
+        if(left == right) return ns[left];
+        int mid = left + (right - left)/2;
+        int a = help(ns, left, mid), b = help(ns, mid + 1, right);
+        if(a==b) return a;
+        int ct1 = count(ns, left, mid, a), ct2 = count(ns, mid+1, right, b);
+        return ct1 > ct2 ? a : b;
+    }
+    int count(vector<int>& ns, int left, int right, int target){
+        int ct = 0;
+        for(int i=left; i<=right; ++i){
+            if(target == ns[i]) ++ct;
+        }
+        return ct;
+    }
+};
 
 
 /*
