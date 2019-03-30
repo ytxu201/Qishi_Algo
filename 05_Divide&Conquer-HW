@@ -2,6 +2,26 @@
 HW-01: LeetCode 4 Median of Two Sorted Arrays
 */
 
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int m = nums1.size(), n = nums2.size(), total = m + n;
+        if(total%2==0) return (help(nums1, 0, nums2, 0, total/2) + help(nums1, 0, nums2, 0, total/2+1))/2.0;
+        return help(nums1, 0, nums2, 0, total/2+1)/1.0;
+    }
+private:
+    double help(vector<int>& n1, int ip1, vector<int>& n2, int ip2, int k){//find the k-th element;
+        int m = n1.size() - ip1, n = n2.size() - ip2;
+        if(m > n) return help(n2, ip2, n1, ip1, k);
+        if(m==0) return n2[ip2+k-1];
+        if(k==1) return min(n1[ip1], n2[ip2]);
+        int a = min(m, k/2), b = k - a;
+        if(n1[ip1+a-1] == n2[ip2+b-1]) return n1[ip1+a-1];
+        if(n1[ip1+a-1] > n2[ip2+b-1]) return help(n1, ip1, n2, ip2+b, k-b);
+        return help(n1, ip1+a, n2, ip2, k-a);
+    }
+};
+
 
 /*
 HW-02: LeetCode 53 Maximum Subarray
