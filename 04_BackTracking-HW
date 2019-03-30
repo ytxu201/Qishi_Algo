@@ -151,3 +151,33 @@ private:
         return true;
     } 
 };
+
+
+
+/*
+HW-05: 37. Sudoku Solver
+*/
+Note: Tried to use backtracking, but cannot pass the OJ due to reaching Memory Limit or Time Limit. So use dp instead.
+      There is also another common greedy algorithm for this question.
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        for(int i=0; i<p.size();){//remove extra '*' from continous '*'s.
+            if(p[i] == '*' && i+1<p.size() && p[i+1] == '*') p.erase(i+1, 1);
+            else ++i;
+        }
+        int m = s.size(), n = p.size();
+        vector<vector<bool>> dp(m+1, vector<bool>(n+1, false));
+        //dp[i][j] represents the match results of s.substr(0, i) and p.substr(0, j);
+        dp[0][0] = true;
+        if(p[0] == '*') dp[0][1] = true;
+        for(int i=0; i<m; ++i){
+            for(int j=0; j<n; ++j){
+                if(s[i] == p[j] || p[j] == '?') dp[i+1][j+1] = dp[i][j];
+                else if(p[j] == '*') dp[i+1][j+1] = dp[i][j+1] || dp[i+1][j];
+                else dp[i][j] = false;
+            }
+        }
+        return dp[m][n];
+    }
+};
