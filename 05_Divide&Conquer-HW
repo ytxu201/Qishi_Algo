@@ -74,3 +74,32 @@ private:
 /*
 HW-04: LeetCode 973 K Closest Points to Origin
 */
+
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        int len = points.size();
+        if(len == K) return points;
+        vector<vector<int>> res;
+        help(points, 0, len, K);
+        for(int i=0; i<K; ++i) res.push_back(points[i]);
+        return res;
+    }
+private:
+    void help(vector<vector<int>>& ps, int left, int right, int K){
+        if(K==0) return;//all find;
+        int i = left, j = right-1;
+        double pivot = dis(ps[j--]);
+        while(i < j){
+            while(i < j && dis(ps[i]) < pivot) ++i;
+            while(j > i && dis(ps[j]) >= pivot) --j;
+            if(i < j) swap(ps[i++], ps[j--]);
+        }
+        if(dis(ps[i++]) > pivot) swap(ps[i-1], ps[right-1]);
+        if(i-left <= K) help(ps, i, right, K-i+left);//find (i-left) elements;
+        else help(ps, left, i, K);//find none, but can narrow the search range;
+    }
+    double dis(vector<int>& v){
+        return sqrt(v[0]*v[0] + v[1]*v[1]);
+    }
+};
