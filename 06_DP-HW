@@ -70,6 +70,27 @@ public:
 HW-04 LeetCode 416 Partition Equal Subset Sum
 */
 
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        for(auto &a : nums) sum += a;
+        if(sum%2 != 0) return false;
+        sum /= 2;
+        int len = nums.size();
+        vector<vector<bool>> dp(sum+1, vector<bool>(len+1, false));
+        for(int i=0; i<=len; ++i) dp[0][i] = true;
+        sort(nums.begin(), nums.end());
+        for(int i=1; i<=sum; ++i){
+            for(int j=1; j<=len; ++j){
+                if(i-nums[j-1] >= 0) dp[i][j] = dp[i][j-1] || dp[i-nums[j-1]][j-1];
+                else dp[i][j] = dp[i][j-1];
+            }
+        }
+        return dp[sum][len];
+    }
+};
+
 
 /*
 HW-05 LeetCode 322 Coin Change
