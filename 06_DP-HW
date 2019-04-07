@@ -2,6 +2,26 @@
 HW-01 LeetCode 139 Word Break
 */
 
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        vector<bool> dp(s.size()+1, false);
+        unordered_map<string, int> mp;
+        for(auto &a : wordDict) ++mp[a];
+        dp[0] = true;
+        for(int i=1; i<=s.size(); ++i){
+            for(int j=1; j<=i; ++j){
+                if(dp[j-1] && mp.count(s.substr(j-1, i-j+1))){
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.size()];
+    }
+};
+
+
 /*
 HW-02 LeetCode 300 Longest Increasing Subsequence
 */
