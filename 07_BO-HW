@@ -1,0 +1,22 @@
+/*
+HW-01: 169. Majority Element
+*/
+
+class Solution {
+public:
+    int majorityElement(vector<int> &num) {
+        int majority = 0;
+        for (unsigned int i = 0, mask = 1; i < 32; i++, mask <<= 1) {
+            int bits = 0;
+            for (int nu : num) {
+                if (nu & mask) {
+                    bits++;
+                }
+            }
+            if (bits > num.size() / 2) {
+                majority |= mask;
+            }
+        }
+        return majority;
+    }
+};
