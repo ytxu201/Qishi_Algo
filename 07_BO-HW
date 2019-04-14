@@ -96,6 +96,22 @@ private:
 HW-06: 338. Counting Bits
 */
 
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> dp(num+1,0);
+        for(int i=1; i<num+1; ++i) dp[i] = dp[i>>1] + (i&1);
+        return dp;
+    }
+};
+
+
+/*
+HW-07: 397. Integer Replacement
+*/
+
+
+
 
 
 
