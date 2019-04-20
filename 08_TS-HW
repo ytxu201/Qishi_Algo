@@ -68,8 +68,48 @@ public:
 
 
 /*
-HW-03    210. Course Schedule II
+HW-03    444 Sequences reconstruction
 */
 
-
+class Solution {
+public:
+    bool sequenceReconstruction(vector<int>& org, vector<vector<int>>& seqs) {
+        unordered_map<int, unordered_set<int>> gh;
+        unordered_map<int, int> indegree;
+        for (auto& s : seqs){//build a gh
+            for (int i = 0; i < s.size(); ++i){
+                gh[s[i]];
+                if (i + 1 < s.size()){//elements before the last one
+                    if (gh[s[i]].count(s[i+1])==0)
+                        indegree[s[i + 1]] += 1;
+                    gh[s[i]].insert(s[i + 1]);
+                    gh[s[i + 1]];
+                }
+            }
+        }
+        if (gh.size() != org.size()) return false;
+        queue<int> q;
+        vector<int> res;
+        for (auto a : gh){
+            if (indegree[a.first] == 0){
+                q.push(a.first);
+                res.push_back(a.first);
+            }
+        }
+        if (res.size() != 1) return false;//only one path
+        while (!q.empty()){
+            if(q.size()!=1) return false;//only one path
+            int cur = q.front();
+            q.pop();
+            for (auto nxt : gh[cur]){
+                indegree[nxt] -= 1;
+                if (indegree[nxt] == 0){
+                    q.push(nxt);
+                    res.push_back(nxt);
+                }
+            }
+        }
+        return res == org;
+    }
+};
 
