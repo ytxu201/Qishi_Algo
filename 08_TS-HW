@@ -126,16 +126,16 @@ public:
         vector<int> in(256, 0);
         queue<char> q;
         string res = "";
-        for (auto a : words) ch.insert(a.begin(), a.end());
-        for (int i = 0; i < (int)words.size() - 1; ++i) {
+        for (auto a : words) ch.insert(a.begin(), a.end());//collect all the chars;
+        for (int i = 0; i < (int)words.size() - 1; ++i) {//build the order in pairs;
             int mn = min(words[i].size(), words[i + 1].size()), j = 0;
-            for (; j < min(words[i].size(), words[i + 1].size()); ++j) {
+            for (; j < mn; ++j) {
                 if (words[i][j] != words[i + 1][j]) {
                     st.insert(make_pair(words[i][j], words[i + 1][j]));
                     break;
                 }
             }
-            if (j == mn && words[i].size() > words[i + 1].size()) return "";
+            if (j == mn && words[i].size() > words[i + 1].size()) return "";//one corner case: all the same but length.
         }
         for (auto a : st) ++in[a.second];
         for (auto a : ch) {
